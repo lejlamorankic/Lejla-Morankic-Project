@@ -1,4 +1,4 @@
-package ui.screens.details
+package ui.screens.goals
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -11,36 +11,33 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import ui.screens.details.components.DetailCard
+import ui.screens.goals.components.GoalOverviewItem
 
 @Composable
-fun GoalDetailScreen(
-    goalName: String,
+fun GoalsScreen(
     onBackClick: () -> Unit
 ) {
+    val goals = listOf(
+        "Study Kotlin",
+        "Workout",
+        "Drink Water"
+    )
+
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp)
     ) {
         Text(
-            text = "Goal Details",
+            text = "All Goals",
             style = MaterialTheme.typography.headlineMedium
         )
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        DetailCard(
-            title = "Goal Name",
-            value = goalName
-        )
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        DetailCard(
-            title = "Status",
-            value = "Active"
-        )
+        goals.forEach { goal ->
+            GoalOverviewItem(goalName = goal)
+        }
 
         Spacer(modifier = Modifier.height(16.dp))
 

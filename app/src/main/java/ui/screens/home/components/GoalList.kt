@@ -1,7 +1,6 @@
 package ui.screens.home.components
 
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import com.example.goaltrack.model.Goal
@@ -14,8 +13,8 @@ fun GoalList(
     if (goals.isEmpty()) {
         Text("No goals yet")
     } else {
-        LazyColumn {
-            items(goals) { goal ->
+        Column {
+            goals.forEach { goal ->
                 GoalItem(
                     goal = goal,
                     onGoalClick = onGoalClick

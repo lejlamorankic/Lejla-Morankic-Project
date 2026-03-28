@@ -5,6 +5,8 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
@@ -22,7 +24,10 @@ import ui.screens.home.components.UserProgressCard
 @Composable
 fun HomeScreen(
     onNavigateToAdd: () -> Unit,
-    onNavigateToDetails: (String) -> Unit
+    onNavigateToDetails: (String) -> Unit,
+    onNavigateToAchievements: () -> Unit,
+    onNavigateToStats: () -> Unit,
+    onNavigateToGoals: () -> Unit
 ) {
     val viewModel = remember { GoalViewModel() }
     var goalText by remember { mutableStateOf("") }
@@ -60,9 +65,34 @@ fun HomeScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .verticalScroll(rememberScrollState())
             .padding(16.dp)
     ) {
         DashboardTitle(title = "GoalTrack")
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Button(onClick = onNavigateToAdd) {
+            Text("Go to Add Screen")
+        }
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        Button(onClick = onNavigateToAchievements) {
+            Text("Go to Achievements")
+        }
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        Button(onClick = onNavigateToGoals) {
+            Text("Go to Goals")
+        }
+
+        Button(onClick = onNavigateToStats) {
+            Text("Go to Stats")
+        }
 
         Spacer(modifier = Modifier.height(16.dp))
 
@@ -119,11 +149,6 @@ fun HomeScreen(
             )
         }
 
-
         Spacer(modifier = Modifier.height(16.dp))
-
-        Button(onClick = onNavigateToAdd) {
-            Text("Go to Add Screen")
-        }
     }
 }
