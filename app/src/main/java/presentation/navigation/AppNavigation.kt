@@ -1,4 +1,4 @@
-package ui.navigation
+package presentation.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavType
@@ -6,12 +6,12 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import ui.screens.add.AddGoalScreen
-import ui.screens.achievements.AchievementsScreen
-import ui.screens.details.GoalDetailScreen
-import ui.screens.goals.GoalsScreen
-import ui.screens.home.HomeScreen
-import ui.screens.stats.StatsScreen
+import presentation.ui.screens.add.AddGoalScreen
+import presentation.ui.screens.achievements.AchievementsScreen
+import presentation.ui.screens.details.GoalDetailScreen
+import presentation.ui.screens.goals.GoalsScreen
+import presentation.ui.screens.home.HomeScreen
+import presentation.ui.screens.stats.StatsScreen
 
 @Composable
 fun AppNavigation() {
@@ -22,7 +22,7 @@ fun AppNavigation() {
         startDestination = "home"
     ) {
         composable("home") {
-            HomeScreen(
+            _root_ide_package_.presentation.ui.screens.home.HomeScreen(
                 onNavigateToAdd = {
                     navController.navigate("add")
                 },
@@ -42,7 +42,7 @@ fun AppNavigation() {
         }
 
         composable("add") {
-            AddGoalScreen(
+            _root_ide_package_.presentation.ui.screens.add.AddGoalScreen(
                 onBackClick = {
                     navController.popBackStack()
                 }
@@ -50,7 +50,7 @@ fun AppNavigation() {
         }
 
         composable("goals") {
-            GoalsScreen(
+            _root_ide_package_.presentation.ui.screens.goals.GoalsScreen(
                 onBackClick = {
                     navController.popBackStack()
                 }
@@ -65,7 +65,7 @@ fun AppNavigation() {
         ) { backStackEntry ->
             val goalName = backStackEntry.arguments?.getString("goalName") ?: ""
 
-            GoalDetailScreen(
+            _root_ide_package_.presentation.ui.screens.details.GoalDetailScreen(
                 goalName = goalName,
                 onBackClick = {
                     navController.popBackStack()
@@ -74,7 +74,7 @@ fun AppNavigation() {
         }
 
         composable("achievements") {
-            AchievementsScreen(
+            _root_ide_package_.presentation.ui.screens.achievements.AchievementsScreen(
                 onBackClick = {
                     navController.popBackStack()
                 }
@@ -82,7 +82,7 @@ fun AppNavigation() {
         }
 
         composable("stats") {
-            StatsScreen(
+            _root_ide_package_.presentation.ui.screens.stats.StatsScreen(
                 onBackClick = {
                     navController.popBackStack()
                 }

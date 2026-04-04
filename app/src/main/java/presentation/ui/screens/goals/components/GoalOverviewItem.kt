@@ -1,4 +1,4 @@
-package ui.screens.goals.components
+package presentation.ui.screens.goals.components
 
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height

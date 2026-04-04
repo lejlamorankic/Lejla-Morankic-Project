@@ -1,4 +1,4 @@
-package ui.screens.home.components
+package presentation.ui.screens.home.components
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -15,7 +15,7 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun InfoSection(
     title: String,
-    rows: List<InfoRowData>,
+    rows: List<presentation.ui.screens.home.components.InfoRowData>,
     modifier: Modifier = Modifier
 ) {
     Card(

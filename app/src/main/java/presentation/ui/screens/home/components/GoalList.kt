@@ -1,4 +1,4 @@
-package ui.screens.home.components
+package presentation.ui.screens.home.components
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.Text
@@ -15,7 +15,7 @@ fun GoalList(
     } else {
         Column {
             goals.forEach { goal ->
-                GoalItem(
+                _root_ide_package_.presentation.ui.screens.home.components.GoalItem(
                     goal = goal,
                     onGoalClick = onGoalClick
                 )

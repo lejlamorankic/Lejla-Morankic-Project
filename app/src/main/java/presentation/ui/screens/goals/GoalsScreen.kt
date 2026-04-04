@@ -1,4 +1,4 @@
-package ui.screens.goals
+package presentation.ui.screens.goals
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -11,7 +11,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import ui.screens.goals.components.GoalOverviewItem
+import presentation.ui.screens.goals.components.GoalOverviewItem
 
 @Composable
 fun GoalsScreen(
@@ -36,7 +36,7 @@ fun GoalsScreen(
         Spacer(modifier = Modifier.height(16.dp))
 
         goals.forEach { goal ->
-            GoalOverviewItem(goalName = goal)
+            _root_ide_package_.presentation.ui.screens.goals.components.GoalOverviewItem(goalName = goal)
         }
 
         Spacer(modifier = Modifier.height(16.dp))

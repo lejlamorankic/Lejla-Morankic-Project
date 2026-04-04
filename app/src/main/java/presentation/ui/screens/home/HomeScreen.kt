@@ -1,4 +1,4 @@
-package ui.screens.home
+package presentation.ui.screens.home
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -14,12 +14,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.goaltrack.model.Goal
 import com.example.goaltrack.viewmodel.GoalViewModel
-import ui.screens.home.components.DashboardTitle
-import ui.screens.home.components.GoalInputSection
-import ui.screens.home.components.GoalList
-import ui.screens.home.components.InfoRowData
-import ui.screens.home.components.InfoSection
-import ui.screens.home.components.UserProgressCard
+import presentation.ui.screens.home.components.DashboardTitle
+import presentation.ui.screens.home.components.GoalInputSection
+import presentation.ui.screens.home.components.GoalList
+import presentation.ui.screens.home.components.InfoRowData
+import presentation.ui.screens.home.components.InfoSection
+import presentation.ui.screens.home.components.UserProgressCard
 
 @Composable
 fun HomeScreen(
@@ -45,21 +45,30 @@ fun HomeScreen(
     val maxXP = 100
 
     val todayGoalRows = if (goals.isEmpty()) {
-        listOf(InfoRowData("No goals added yet"))
+        listOf(_root_ide_package_.presentation.ui.screens.home.components.InfoRowData("No goals added yet"))
     } else {
         goals.map { goal ->
-            InfoRowData(title = goal.name)
+            _root_ide_package_.presentation.ui.screens.home.components.InfoRowData(title = goal.name)
         }
     }
 
     val achievementRows = achievements.map { achievement ->
-        InfoRowData(title = achievement)
+        _root_ide_package_.presentation.ui.screens.home.components.InfoRowData(title = achievement)
     }
 
     val quickStatsRows = listOf(
-        InfoRowData("Total Goals", goals.size.toString()),
-        InfoRowData("Current XP", currentXP.toString()),
-        InfoRowData("Achievements", achievements.size.toString())
+        _root_ide_package_.presentation.ui.screens.home.components.InfoRowData(
+            "Total Goals",
+            goals.size.toString()
+        ),
+        _root_ide_package_.presentation.ui.screens.home.components.InfoRowData(
+            "Current XP",
+            currentXP.toString()
+        ),
+        _root_ide_package_.presentation.ui.screens.home.components.InfoRowData(
+            "Achievements",
+            achievements.size.toString()
+        )
     )
 
     Column(
@@ -68,7 +77,7 @@ fun HomeScreen(
             .verticalScroll(rememberScrollState())
             .padding(16.dp)
     ) {
-        DashboardTitle(title = "GoalTrack")
+        _root_ide_package_.presentation.ui.screens.home.components.DashboardTitle(title = "GoalTrack")
 
         Spacer(modifier = Modifier.height(16.dp))
 
@@ -96,7 +105,7 @@ fun HomeScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        UserProgressCard(
+        _root_ide_package_.presentation.ui.screens.home.components.UserProgressCard(
             levelNo = levelNo,
             levelTitle = levelTitle,
             currentXP = currentXP,
@@ -105,7 +114,7 @@ fun HomeScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        GoalInputSection(
+        _root_ide_package_.presentation.ui.screens.home.components.GoalInputSection(
             goalText = goalText,
             onGoalTextChange = { goalText = it },
             onAddClick = {
@@ -119,21 +128,21 @@ fun HomeScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        InfoSection(
+        _root_ide_package_.presentation.ui.screens.home.components.InfoSection(
             title = "Today's Goals",
             rows = todayGoalRows
         )
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        InfoSection(
+        _root_ide_package_.presentation.ui.screens.home.components.InfoSection(
             title = "Achievements",
             rows = achievementRows
         )
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        InfoSection(
+        _root_ide_package_.presentation.ui.screens.home.components.InfoSection(
             title = "Quick Stats",
             rows = quickStatsRows
         )
@@ -141,7 +150,7 @@ fun HomeScreen(
         Spacer(modifier = Modifier.height(16.dp))
 
         if (goals.isNotEmpty()) {
-            GoalList(
+            _root_ide_package_.presentation.ui.screens.home.components.GoalList(
                 goals = goals,
                 onGoalClick = { goalName ->
                     onNavigateToDetails(goalName)

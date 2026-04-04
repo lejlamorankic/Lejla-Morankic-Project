@@ -1,4 +1,4 @@
-package ui.screens.home.components
+package presentation.ui.screens.home.components
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Spacer

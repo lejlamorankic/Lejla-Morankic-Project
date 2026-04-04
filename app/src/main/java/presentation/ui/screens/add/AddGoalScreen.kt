@@ -1,4 +1,4 @@
-package ui.screens.add
+package presentation.ui.screens.add
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -10,7 +10,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import ui.screens.add.components.AddGoalForm
+import presentation.ui.screens.add.components.AddGoalForm
 
 @Composable
 fun AddGoalScreen(
@@ -31,7 +31,7 @@ fun AddGoalScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        AddGoalForm(
+        _root_ide_package_.presentation.ui.screens.add.components.AddGoalForm(
             goalText = goalText,
             onGoalTextChange = { goalText = it },
             onSaveClick = onBackClick,

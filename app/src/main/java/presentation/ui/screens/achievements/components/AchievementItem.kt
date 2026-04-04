@@ -1,4 +1,4 @@
-package ui.screens.achievements.components
+package presentation.ui.screens.achievements.components
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth

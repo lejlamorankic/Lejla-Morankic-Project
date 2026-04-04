@@ -1,4 +1,4 @@
-package ui.screens.details.components
+package presentation.ui.screens.details.components
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth

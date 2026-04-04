@@ -1,4 +1,4 @@
-package ui.screens.achievements
+package presentation.ui.screens.achievements
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -11,7 +11,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import ui.screens.achievements.components.AchievementItem
+import presentation.ui.screens.achievements.components.AchievementItem
 
 @Composable
 fun AchievementsScreen(
@@ -36,7 +36,7 @@ fun AchievementsScreen(
         Spacer(modifier = Modifier.height(16.dp))
 
         achievements.forEach { achievement ->
-            AchievementItem(title = achievement)
+            _root_ide_package_.presentation.ui.screens.achievements.components.AchievementItem(title = achievement)
             Spacer(modifier = Modifier.height(8.dp))
         }
 

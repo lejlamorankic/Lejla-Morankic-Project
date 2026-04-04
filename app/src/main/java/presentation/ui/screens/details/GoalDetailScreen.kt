@@ -1,4 +1,4 @@
-package ui.screens.details
+package presentation.ui.screens.details
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -11,7 +11,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import ui.screens.details.components.DetailCard
+import presentation.ui.screens.details.components.DetailCard
 
 @Composable
 fun GoalDetailScreen(
@@ -30,14 +30,14 @@ fun GoalDetailScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        DetailCard(
+        _root_ide_package_.presentation.ui.screens.details.components.DetailCard(
             title = "Goal Name",
             value = goalName
         )
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        DetailCard(
+        _root_ide_package_.presentation.ui.screens.details.components.DetailCard(
             title = "Status",
             value = "Active"
         )

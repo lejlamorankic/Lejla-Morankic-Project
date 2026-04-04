@@ -1,4 +1,4 @@
-package ui.screens.stats.components
+package presentation.ui.screens.stats.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
