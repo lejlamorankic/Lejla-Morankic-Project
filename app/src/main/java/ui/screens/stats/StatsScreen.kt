@@ -1,32 +1,22 @@
-package presentation.ui.screens.stats
+package com.example.goaltrack.presentation.ui.screens.stats
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import presentation.ui.screens.stats.components.StatBadge
-import presentation.ui.screens.stats.components.StatRow
+import com.example.goaltrack.presentation.ui.screens.stats.components.StatRow
 
 @Composable
 fun StatsScreen(
     onBackClick: () -> Unit
 ) {
-    val badges = listOf(
-        "Active",
-        "Focused",
-        "Consistent",
-        "Motivated"
-    )
-
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -36,14 +26,6 @@ fun StatsScreen(
             text = "Quick Stats",
             style = MaterialTheme.typography.headlineMedium
         )
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        LazyRow {
-            items(badges) { badge ->
-                StatBadge(title = badge)
-            }
-        }
 
         Spacer(modifier = Modifier.height(16.dp))
 
