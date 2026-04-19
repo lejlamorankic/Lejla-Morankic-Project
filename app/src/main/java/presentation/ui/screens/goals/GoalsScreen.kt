@@ -4,17 +4,19 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.goaltrack.model.data.HardcodedData
+import presentation.ui.components.ScreenTopBar
 import presentation.ui.screens.goals.components.GoalOverviewItem
 
 @Composable
@@ -22,27 +24,43 @@ fun GoalsScreen(
     onBackClick: () -> Unit,
     onGoalClick: (String) -> Unit
 ) {
-    val goals = HardcodedData.sampleGoals
+    var searchText by remember { mutableStateOf("") }
+
+    val allGoals = HardcodedData.sampleGoals
+
+    val filteredGoals = allGoals.filter {
+        it.name.contains(searchText, ignoreCase = true)
+    }
 
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp)
     ) {
-        Text(
-            text = "All Goals",
-            style = MaterialTheme.typography.headlineMedium
+
+        ScreenTopBar(
+            title = "All Goals",
+            onBackClick = onBackClick
         )
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        if (goals.isEmpty()) {
+        OutlinedTextField(
+            value = searchText,
+            onValueChange = { searchText = it },
+            label = { Text("Search goals") },
+            modifier = Modifier.fillMaxWidth()
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        if (filteredGoals.isEmpty()) {
             Text("No items available")
         } else {
             LazyColumn(
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                items(goals) { goal ->
+                items(filteredGoals) { goal ->
                     GoalOverviewItem(
                         goalName = goal.name,
                         onGoalClick = onGoalClick
@@ -52,9 +70,5 @@ fun GoalsScreen(
         }
 
         Spacer(modifier = Modifier.height(16.dp))
-
-        Button(onClick = onBackClick) {
-            Text("Back")
-        }
     }
 }

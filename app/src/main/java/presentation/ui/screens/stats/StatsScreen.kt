@@ -7,12 +7,11 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.Button
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import presentation.ui.components.ScreenTopBar
 import presentation.ui.screens.stats.components.StatBadge
 import presentation.ui.screens.stats.components.StatRow
 
@@ -32,9 +31,9 @@ fun StatsScreen(
             .fillMaxSize()
             .padding(16.dp)
     ) {
-        Text(
-            text = "Quick Stats",
-            style = MaterialTheme.typography.headlineMedium
+        ScreenTopBar(
+            title = "Quick Stats",
+            onBackClick = onBackClick
         )
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -52,9 +51,5 @@ fun StatsScreen(
         StatRow(label = "Achievements", value = "4")
 
         Spacer(modifier = Modifier.height(16.dp))
-
-        Button(onClick = onBackClick) {
-            Text("Back")
-        }
     }
 }

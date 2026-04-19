@@ -27,7 +27,7 @@ fun AppNavigation() {
                     navController.navigate("add")
                 },
                 onNavigateToDetails = { goalName ->
-                    navController.navigate("details/$goalName")
+                    navController.navigate("details/$goalName/Active")
                 },
                 onNavigateToAchievements = {
                     navController.navigate("achievements")
@@ -55,21 +55,24 @@ fun AppNavigation() {
                     navController.popBackStack()
                 },
                 onGoalClick = { goalName ->
-                    navController.navigate("details/$goalName")
+                    navController.navigate("details/$goalName/Active")
                 }
             )
         }
 
         composable(
-            route = "details/{goalName}",
+            route = "details/{goalName}/{goalStatus}",
             arguments = listOf(
-                navArgument("goalName") { type = NavType.StringType }
+                navArgument("goalName") { type = NavType.StringType },
+                navArgument("goalStatus") { type = NavType.StringType }
             )
         ) { backStackEntry ->
             val goalName = backStackEntry.arguments?.getString("goalName") ?: ""
+            val goalStatus = backStackEntry.arguments?.getString("goalStatus") ?: ""
 
             GoalDetailScreen(
                 goalName = goalName,
+                goalStatus = goalStatus,
                 onBackClick = {
                     navController.popBackStack()
                 }

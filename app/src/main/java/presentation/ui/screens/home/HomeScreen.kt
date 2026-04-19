@@ -11,12 +11,16 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.example.goaltrack.model.Goal
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.goaltrack.model.data.HardcodedData
-import com.example.goaltrack.viewmodel.GoalViewModel
 import presentation.ui.screens.home.components.CategoryChip
 import presentation.ui.screens.home.components.DashboardTitle
 import presentation.ui.screens.home.components.GoalInputSection
@@ -24,6 +28,7 @@ import presentation.ui.screens.home.components.GoalList
 import presentation.ui.screens.home.components.InfoRowData
 import presentation.ui.screens.home.components.InfoSection
 import presentation.ui.screens.home.components.UserProgressCard
+import presentation.viewmodel.GoalViewModel
 
 @Composable
 fun HomeScreen(
@@ -33,26 +38,34 @@ fun HomeScreen(
     onNavigateToStats: () -> Unit,
     onNavigateToGoals: () -> Unit
 ) {
-    val viewModel = remember { GoalViewModel() }
-    var goalText by remember { mutableStateOf("") }
-    val goals = viewModel.getGoals()
-    val categories = HardcodedData.sampleCategories
+    val viewModel: GoalViewModel = viewModel()
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    val achievements = listOf(
-        "First Goal Added",
-        "Getting Started",
-        "Future Achiever"
-    )
+    val categories = listOf("All") + HardcodedData.sampleCategories
+    var selectedCategory by remember { mutableStateOf("All") }
 
-    val levelNo = 2
-    val levelTitle = "Goal Starter"
-    val currentXP = goals.size * 20
-    val maxXP = 100
+    val achievements = HardcodedData.sampleAchievements
 
-    val todayGoalRows = if (goals.isEmpty()) {
-        listOf(InfoRowData("No goals added yet"))
+    val filteredGoals = uiState.goals.filter { goal ->
+        when (selectedCategory) {
+            "All" -> true
+            "Study" -> goal.name.contains("study", ignoreCase = true) ||
+                    goal.name.contains("read", ignoreCase = true)
+            "Health" -> goal.name.contains("drink", ignoreCase = true) ||
+                    goal.name.contains("water", ignoreCase = true)
+            "Fitness" -> goal.name.contains("workout", ignoreCase = true) ||
+                    goal.name.contains("exercise", ignoreCase = true)
+            "Productivity" -> goal.name.contains("finish", ignoreCase = true) ||
+                    goal.name.contains("assignment", ignoreCase = true)
+            "Personal" -> goal.name.contains("personal", ignoreCase = true)
+            else -> true
+        }
+    }
+
+    val todayGoalRows = if (filteredGoals.isEmpty()) {
+        listOf(InfoRowData("No goals available for this category"))
     } else {
-        goals.map { goal ->
+        filteredGoals.map { goal ->
             InfoRowData(title = goal.name)
         }
     }
@@ -62,8 +75,8 @@ fun HomeScreen(
     }
 
     val quickStatsRows = listOf(
-        InfoRowData("Total Goals", goals.size.toString()),
-        InfoRowData("Current XP", currentXP.toString()),
+        InfoRowData("Total Goals", uiState.totalGoals.toString()),
+        InfoRowData("Current XP", uiState.currentXP.toString()),
         InfoRowData("Achievements", achievements.size.toString())
     )
 
@@ -79,7 +92,13 @@ fun HomeScreen(
 
         LazyRow {
             items(categories) { category ->
-                CategoryChip(title = category)
+                CategoryChip(
+                    title = category,
+                    isSelected = selectedCategory == category,
+                    onClick = {
+                        selectedCategory = category
+                    }
+                )
             }
         }
 
@@ -110,24 +129,19 @@ fun HomeScreen(
         Spacer(modifier = Modifier.height(16.dp))
 
         UserProgressCard(
-            levelNo = levelNo,
-            levelTitle = levelTitle,
-            currentXP = currentXP,
-            maxXP = maxXP
+            levelNo = uiState.levelNo,
+            levelTitle = uiState.levelTitle,
+            currentXP = uiState.currentXP,
+            maxXP = 100
         )
 
         Spacer(modifier = Modifier.height(16.dp))
 
         GoalInputSection(
-            goalText = goalText,
-            onGoalTextChange = { goalText = it },
-            onAddClick = {
-                if (goalText.isNotBlank()) {
-                    viewModel.addGoal(Goal(name = goalText))
-                    goalText = ""
-                }
-            },
-            isValid = goalText.isNotBlank()
+            goalText = uiState.goalText,
+            onGoalTextChange = { viewModel.onGoalTextChange(it) },
+            onAddClick = { viewModel.addGoal() },
+            isValid = uiState.isInputValid
         )
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -153,15 +167,15 @@ fun HomeScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        if (goals.isNotEmpty()) {
+        if (filteredGoals.isNotEmpty()) {
             GoalList(
-                goals = goals,
+                goals = filteredGoals,
                 onGoalClick = { goalName ->
                     onNavigateToDetails(goalName)
                 }
             )
-
-            Spacer(modifier = Modifier.height(16.dp))
         }
+
+        Spacer(modifier = Modifier.height(16.dp))
     }
 }
