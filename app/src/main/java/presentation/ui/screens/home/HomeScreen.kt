@@ -13,9 +13,6 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -28,7 +25,7 @@ import presentation.ui.screens.home.components.GoalList
 import presentation.ui.screens.home.components.InfoRowData
 import presentation.ui.screens.home.components.InfoSection
 import presentation.ui.screens.home.components.UserProgressCard
-import presentation.viewmodel.GoalViewModel
+import presentation.viewmodel.HomeViewModel
 
 @Composable
 fun HomeScreen(
@@ -38,16 +35,14 @@ fun HomeScreen(
     onNavigateToStats: () -> Unit,
     onNavigateToGoals: () -> Unit
 ) {
-    val viewModel: GoalViewModel = viewModel()
+    val viewModel: HomeViewModel = viewModel()
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     val categories = listOf("All") + HardcodedData.sampleCategories
-    var selectedCategory by remember { mutableStateOf("All") }
-
     val achievements = HardcodedData.sampleAchievements
 
     val filteredGoals = uiState.goals.filter { goal ->
-        when (selectedCategory) {
+        when (uiState.selectedCategory) {
             "All" -> true
             "Study" -> goal.name.contains("study", ignoreCase = true) ||
                     goal.name.contains("read", ignoreCase = true)
@@ -94,9 +89,9 @@ fun HomeScreen(
             items(categories) { category ->
                 CategoryChip(
                     title = category,
-                    isSelected = selectedCategory == category,
+                    isSelected = uiState.selectedCategory == category,
                     onClick = {
-                        selectedCategory = category
+                        viewModel.onCategorySelected(category)
                     }
                 )
             }

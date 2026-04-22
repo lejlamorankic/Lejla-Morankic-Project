@@ -9,17 +9,21 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.example.goaltrack.model.data.HardcodedData
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import presentation.ui.components.ScreenTopBar
 import presentation.ui.screens.achievements.components.AchievementItem
+import presentation.viewmodel.AchievementsViewModel
 
 @Composable
 fun AchievementsScreen(
     onBackClick: () -> Unit
 ) {
-    val achievements = HardcodedData.sampleAchievements
+    val viewModel: AchievementsViewModel = viewModel()
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     Column(
         modifier = Modifier
@@ -33,13 +37,13 @@ fun AchievementsScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        if (achievements.isEmpty()) {
+        if (uiState.achievements.isEmpty()) {
             androidx.compose.material3.Text("No items available")
         } else {
             LazyColumn(
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                items(achievements) { achievement ->
+                items(uiState.achievements) { achievement ->
                     AchievementItem(achievement = achievement)
                 }
             }
