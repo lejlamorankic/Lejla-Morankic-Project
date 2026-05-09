@@ -15,7 +15,8 @@ class AddGoalViewModel : ViewModel() {
             it.copy(
                 goalText = text,
                 isInputValid = text.isNotBlank(),
-                errorMessage = null
+                errorMessage = null,
+                status = UiStatus.Init
             )
         }
     }
@@ -27,11 +28,15 @@ class AddGoalViewModel : ViewModel() {
             _uiState.update {
                 it.copy(
                     isInputValid = false,
-                    errorMessage = "Goal cannot be empty"
+                    errorMessage = "Goal cannot be empty",
+                    status = UiStatus.Error("Goal cannot be empty")
                 )
             }
             false
         } else {
+            _uiState.update {
+                it.copy(status = UiStatus.Success)
+            }
             true
         }
     }

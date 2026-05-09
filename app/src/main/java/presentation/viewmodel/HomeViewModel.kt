@@ -1,25 +1,42 @@
 package presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.goaltrack.model.Goal
-import com.example.goaltrack.model.data.HardcodedData
+import com.example.goaltrack.model.repository.GoalRepository
+import com.example.goaltrack.model.repository.GoalRepositoryImpl
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
 class HomeViewModel : ViewModel() {
 
-    private val _uiState = MutableStateFlow(
-        HomeUiState(
-            goals = HardcodedData.sampleGoals,
-            totalGoals = HardcodedData.sampleGoals.size,
-            currentXP = HardcodedData.sampleGoals.size * 20,
-            levelNo = (HardcodedData.sampleGoals.size / 5) + 1,
-            levelTitle = getLevelTitle((HardcodedData.sampleGoals.size / 5) + 1)
-        )
-    )
+    private val repository: GoalRepository = GoalRepositoryImpl()
 
+    private val _uiState = MutableStateFlow(HomeUiState())
     val uiState: StateFlow<HomeUiState> = _uiState
+
+    init {
+        loadGoals()
+    }
+
+    private fun loadGoals() {
+        viewModelScope.launch {
+            try {
+                _uiState.update { it.copy(status = UiStatus.Loading) }
+
+                repository.getGoals().collect { goals ->
+                    updateStateWithGoals(goals)
+                    _uiState.update { it.copy(status = UiStatus.Success) }
+                }
+            } catch (e: Exception) {
+                _uiState.update {
+                    it.copy(status = UiStatus.Error(e.message ?: "Unknown error"))
+                }
+            }
+        }
+    }
 
     fun onGoalTextChange(text: String) {
         _uiState.update {
@@ -41,18 +58,39 @@ class HomeViewModel : ViewModel() {
 
         if (currentState.goalText.isBlank()) return
 
-        val updatedGoals = currentState.goals + Goal(name = currentState.goalText)
-        val updatedLevelNo = (updatedGoals.size / 5) + 1
+        viewModelScope.launch {
+            try {
+                _uiState.update { it.copy(status = UiStatus.Loading) }
+
+                repository.addGoal(
+                    Goal(name = currentState.goalText)
+                )
+
+                _uiState.update {
+                    it.copy(
+                        goalText = "",
+                        isInputValid = false,
+                        status = UiStatus.Success
+                    )
+                }
+            } catch (e: Exception) {
+                _uiState.update {
+                    it.copy(status = UiStatus.Error(e.message ?: "Could not add goal"))
+                }
+            }
+        }
+    }
+
+    private fun updateStateWithGoals(goals: List<Goal>) {
+        val levelNo = (goals.size / 5) + 1
 
         _uiState.update {
             it.copy(
-                goals = updatedGoals,
-                goalText = "",
-                isInputValid = false,
-                totalGoals = updatedGoals.size,
-                currentXP = updatedGoals.size * 20,
-                levelNo = updatedLevelNo,
-                levelTitle = getLevelTitle(updatedLevelNo)
+                goals = goals,
+                totalGoals = goals.size,
+                currentXP = goals.size * 20,
+                levelNo = levelNo,
+                levelTitle = getLevelTitle(levelNo)
             )
         }
     }

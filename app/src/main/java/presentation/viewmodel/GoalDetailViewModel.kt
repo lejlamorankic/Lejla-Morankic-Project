@@ -15,7 +15,8 @@ class GoalDetailViewModel : ViewModel() {
             it.copy(
                 goalName = goalName,
                 goalStatus = goalStatus,
-                isLoaded = true
+                isLoaded = true,
+                status = UiStatus.Success
             )
         }
     }

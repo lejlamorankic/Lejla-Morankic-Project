@@ -10,5 +10,6 @@ data class HomeUiState(
     val currentXP: Int = 0,
     val levelNo: Int = 1,
     val levelTitle: String = "Beginner",
-    val selectedCategory: String = "All"
+    val selectedCategory: String = "All",
+    val status: UiStatus = UiStatus.Init
 )
