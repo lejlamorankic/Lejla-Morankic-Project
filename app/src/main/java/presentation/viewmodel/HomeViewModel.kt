@@ -4,15 +4,17 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.goaltrack.model.Goal
 import com.example.goaltrack.model.repository.GoalRepository
-import com.example.goaltrack.model.repository.GoalRepositoryImpl
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class HomeViewModel : ViewModel() {
-
-    private val repository: GoalRepository = GoalRepositoryImpl()
+@HiltViewModel
+class HomeViewModel @Inject constructor(
+    private val repository: GoalRepository
+) : ViewModel() {
 
     private val _uiState = MutableStateFlow(HomeUiState())
     val uiState: StateFlow<HomeUiState> = _uiState
@@ -24,15 +26,24 @@ class HomeViewModel : ViewModel() {
     private fun loadGoals() {
         viewModelScope.launch {
             try {
-                _uiState.update { it.copy(status = UiStatus.Loading) }
+                _uiState.update {
+                    it.copy(status = UiStatus.Loading)
+                }
 
                 repository.getGoals().collect { goals ->
                     updateStateWithGoals(goals)
-                    _uiState.update { it.copy(status = UiStatus.Success) }
+
+                    _uiState.update {
+                        it.copy(status = UiStatus.Success)
+                    }
                 }
             } catch (e: Exception) {
                 _uiState.update {
-                    it.copy(status = UiStatus.Error(e.message ?: "Unknown error"))
+                    it.copy(
+                        status = UiStatus.Error(
+                            e.message ?: "Unknown error"
+                        )
+                    )
                 }
             }
         }
@@ -60,7 +71,9 @@ class HomeViewModel : ViewModel() {
 
         viewModelScope.launch {
             try {
-                _uiState.update { it.copy(status = UiStatus.Loading) }
+                _uiState.update {
+                    it.copy(status = UiStatus.Loading)
+                }
 
                 repository.addGoal(
                     Goal(name = currentState.goalText)
@@ -75,13 +88,19 @@ class HomeViewModel : ViewModel() {
                 }
             } catch (e: Exception) {
                 _uiState.update {
-                    it.copy(status = UiStatus.Error(e.message ?: "Could not add goal"))
+                    it.copy(
+                        status = UiStatus.Error(
+                            e.message ?: "Could not add goal"
+                        )
+                    )
                 }
             }
         }
     }
 
-    private fun updateStateWithGoals(goals: List<Goal>) {
+    private fun updateStateWithGoals(
+        goals: List<Goal>
+    ) {
         val levelNo = (goals.size / 5) + 1
 
         _uiState.update {

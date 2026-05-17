@@ -6,5 +6,7 @@ data class GoalsUiState(
     val allGoals: List<Goal> = emptyList(),
     val searchText: String = "",
     val filteredGoals: List<Goal> = emptyList(),
+    val editingGoal: Goal? = null,
+    val editText: String = "",
     val status: UiStatus = UiStatus.Init
 )

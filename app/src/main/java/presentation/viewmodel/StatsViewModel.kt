@@ -3,19 +3,26 @@ package presentation.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.goaltrack.model.repository.GoalRepository
-import com.example.goaltrack.model.repository.GoalRepositoryImpl
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class StatsViewModel : ViewModel() {
-
-    private val repository: GoalRepository = GoalRepositoryImpl()
+@HiltViewModel
+class StatsViewModel @Inject constructor(
+    private val repository: GoalRepository
+) : ViewModel() {
 
     private val _uiState = MutableStateFlow(
         StatsUiState(
-            badges = listOf("Active", "Focused", "Consistent", "Motivated")
+            badges = listOf(
+                "Active",
+                "Focused",
+                "Consistent",
+                "Motivated"
+            )
         )
     )
 
@@ -28,7 +35,9 @@ class StatsViewModel : ViewModel() {
     private fun loadStats() {
         viewModelScope.launch {
             try {
-                _uiState.update { it.copy(status = UiStatus.Loading) }
+                _uiState.update {
+                    it.copy(status = UiStatus.Loading)
+                }
 
                 repository.getGoals().collect { goals ->
                     _uiState.update {
@@ -42,7 +51,11 @@ class StatsViewModel : ViewModel() {
                 }
             } catch (e: Exception) {
                 _uiState.update {
-                    it.copy(status = UiStatus.Error(e.message ?: "Unknown error"))
+                    it.copy(
+                        status = UiStatus.Error(
+                            e.message ?: "Unknown error"
+                        )
+                    )
                 }
             }
         }

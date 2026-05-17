@@ -2,16 +2,19 @@ package presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.goaltrack.model.Goal
 import com.example.goaltrack.model.repository.GoalRepository
-import com.example.goaltrack.model.repository.GoalRepositoryImpl
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class GoalsViewModel : ViewModel() {
-
-    private val repository: GoalRepository = GoalRepositoryImpl()
+@HiltViewModel
+class GoalsViewModel @Inject constructor(
+    private val repository: GoalRepository
+) : ViewModel() {
 
     private val _uiState = MutableStateFlow(GoalsUiState())
     val uiState: StateFlow<GoalsUiState> = _uiState
@@ -58,6 +61,77 @@ class GoalsViewModel : ViewModel() {
                 searchText = text,
                 filteredGoals = filteredGoals
             )
+        }
+    }
+
+    fun startEditing(goal: Goal) {
+        _uiState.update {
+            it.copy(
+                editingGoal = goal,
+                editText = goal.name
+            )
+        }
+    }
+
+    fun onEditTextChange(text: String) {
+        _uiState.update {
+            it.copy(editText = text)
+        }
+    }
+
+    fun saveEditedGoal() {
+        val current = _uiState.value
+        val oldGoal = current.editingGoal
+        val newName = current.editText.trim()
+
+        if (oldGoal == null || newName.isBlank()) return
+
+        viewModelScope.launch {
+            try {
+                _uiState.update { it.copy(status = UiStatus.Loading) }
+
+                repository.updateGoal(
+                    oldGoal = oldGoal,
+                    newGoal = Goal(name = newName)
+                )
+
+                _uiState.update {
+                    it.copy(
+                        editingGoal = null,
+                        editText = "",
+                        status = UiStatus.Success
+                    )
+                }
+            } catch (e: Exception) {
+                _uiState.update {
+                    it.copy(status = UiStatus.Error(e.message ?: "Could not update goal"))
+                }
+            }
+        }
+    }
+
+    fun cancelEditing() {
+        _uiState.update {
+            it.copy(
+                editingGoal = null,
+                editText = ""
+            )
+        }
+    }
+
+    fun deleteGoal(goal: Goal) {
+        viewModelScope.launch {
+            try {
+                _uiState.update { it.copy(status = UiStatus.Loading) }
+
+                repository.deleteGoal(goal)
+
+                _uiState.update { it.copy(status = UiStatus.Success) }
+            } catch (e: Exception) {
+                _uiState.update {
+                    it.copy(status = UiStatus.Error(e.message ?: "Could not delete goal"))
+                }
+            }
         }
     }
 }

@@ -3,7 +3,7 @@ package presentation.ui.screens.home
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.goaltrack.model.data.HardcodedData
 import presentation.viewmodel.HomeViewModel
 
@@ -15,7 +15,7 @@ fun HomeScreen(
     onNavigateToStats: () -> Unit,
     onNavigateToGoals: () -> Unit
 ) {
-    val viewModel: HomeViewModel = viewModel()
+    val viewModel: HomeViewModel = hiltViewModel()
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     val categories = listOf("All") + HardcodedData.sampleCategories
