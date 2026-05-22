@@ -1,41 +1,27 @@
 package presentation.ui.screens.add
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.runtime.*
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
-import presentation.ui.components.ScreenTopBar
-import presentation.ui.screens.add.components.AddGoalForm
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
+import presentation.viewmodel.AddGoalViewModel
 
 @Composable
 fun AddGoalScreen(
     onBackClick: () -> Unit
 ) {
-    var goalText by remember { mutableStateOf("") }
-    val isValid = goalText.isNotBlank()
+    val viewModel: AddGoalViewModel = viewModel()
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp)
-    ) {
-        ScreenTopBar(
-            title = "Add New Goal",
-            onBackClick = onBackClick
-        )
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        AddGoalForm(
-            goalText = goalText,
-            onGoalTextChange = { goalText = it },
-            onSaveClick = onBackClick,
-            onBackClick = onBackClick,
-            isValid = isValid
-        )
-    }
+    AddGoalContent(
+        uiState = uiState,
+        onGoalTextChange = viewModel::onGoalTextChange,
+        onSaveClick = {
+            if (viewModel.validateAndSave()) {
+                viewModel.clearForm()
+                onBackClick()
+            }
+        },
+        onBackClick = onBackClick
+    )
 }
