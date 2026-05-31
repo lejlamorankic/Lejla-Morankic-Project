@@ -26,7 +26,7 @@ class NetworkViewModel @Inject constructor(
                     it.copy(
                         isLoading = true,
                         errorMessage = null,
-                        message = "Loading goals from network..."
+                        message = "Loading posts from network..."
                     )
                 }
 
@@ -64,10 +64,9 @@ class NetworkViewModel @Inject constructor(
 
                 repository.createGoal(
                     GoalDto(
-                        name = "Network Goal",
-                        status = "Active",
-                        category = "Cloud",
-                        xp = 50
+                        userId = 1,
+                        title = "Network Goal",
+                        body = "This goal was created using Retrofit POST request."
                     )
                 )
 
@@ -103,11 +102,10 @@ class NetworkViewModel @Inject constructor(
                 repository.updateGoal(
                     id = 1,
                     goal = GoalDto(
+                        userId = 1,
                         id = 1,
-                        name = "Updated Network Goal",
-                        status = "Completed",
-                        category = "Cloud",
-                        xp = 100
+                        title = "Updated Network Goal",
+                        body = "This goal was updated using Retrofit PUT request."
                     )
                 )
 

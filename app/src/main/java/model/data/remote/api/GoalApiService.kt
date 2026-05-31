@@ -10,21 +10,21 @@ import retrofit2.http.Path
 
 interface GoalApiService {
 
-    @GET("goals")
+    @GET("posts")
     suspend fun getGoals(): List<GoalDto>
 
-    @POST("goals")
+    @POST("posts")
     suspend fun createGoal(
         @Body goal: GoalDto
     ): GoalDto
 
-    @PUT("goals/{id}")
+    @PUT("posts/{id}")
     suspend fun updateGoal(
         @Path("id") id: Int,
         @Body goal: GoalDto
     ): GoalDto
 
-    @DELETE("goals/{id}")
+    @DELETE("posts/{id}")
     suspend fun deleteGoal(
         @Path("id") id: Int
     )
